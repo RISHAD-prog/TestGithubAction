@@ -7,7 +7,7 @@ COPY ./TestGithubAction/TestGithubAction/*.csproj ./
 RUN dotnet restore
 
 # Copy everything else and build
-COPY ./TestGithubAction/TestGithubAction/. ./
+COPY ./TestGithubAction/. ./
 RUN dotnet publish -c Release -o /app/publish
 
 # Stage 2: Run
