@@ -1,0 +1,25 @@
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Restore
+      run: dotnet restore ./TestGithubAction/TestGithubAction.sln
+
+    - name: Build
+      run: dotnet build ./TestGithubAction/TestGithubAction.sln --configuration Release
+
+    - name: Publish
+      run: dotnet publish ./TestGithubAction/TestGithubAction.sln -c Release -o ./publish
