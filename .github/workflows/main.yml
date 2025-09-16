@@ -15,6 +15,6 @@ jobs:
         with:
           dotnet-version: 8.x
       - name: 📦 Restore Dependencies
-        run: dotnet restore ./TestGithubAction/TestGithubAction.csproj
+        run: dotnet restore ./TestGithubAction/TestGithubAction/TestGithubAction.csproj
       - name: 🏗️ Build Project
-        run: dotnet build ./TestGithubAction/TestGithubAction.csproj --no-restore
+        run: dotnet build ./TestGithubAction/TestGithubAction/TestGithubAction.csproj --no-restore
