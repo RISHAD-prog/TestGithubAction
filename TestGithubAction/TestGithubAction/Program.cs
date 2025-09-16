@@ -26,7 +26,7 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 });
 
-app.MapGet("/", () => "Hello World v2!");
+app.MapGet("/", () => "Hello World!");
 
 app.Run();
 
