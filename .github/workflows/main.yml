@@ -1,25 +1,39 @@
+name: Deploy to IIS
+
 on:
   workflow_dispatch:
   push:
     branches:
     - main
-
+    
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-and-deploy:
+    runs-on: windows-latest
+
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
 
-    - name: Restore
-      run: dotnet restore ./TestGithubAction/TestGithubAction.sln
+      - name: Restore Dependencies
+        run: dotnet restore
 
-    - name: Build
-      run: dotnet build ./TestGithubAction/TestGithubAction.sln --configuration Release
+      - name: Build Project
+        run: dotnet build --configuration Release --no-restore
 
-    - name: Publish
-      run: dotnet publish ./TestGithubAction/TestGithubAction.sln -c Release -o ./publish
+      - name: Publish Project
+        run: dotnet publish -c Release -o publish
+
+      - name: Deploy to IIS via Web Deploy
+        uses: microsoft/web-deploy-action@v2
+        with:
+          server: ${{ secrets.IIS_SERVER }}
+          site: ${{ secrets.IIS_SITE }}
+          username: ${{ secrets.IIS_USERNAME }}
+          password: ${{ secrets.IIS_PASSWORD }}
+          package: publish
+
